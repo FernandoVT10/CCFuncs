@@ -1,9 +1,11 @@
 #ifndef CCFUNCS_H
 #define CCFUNCS_H
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <stdarg.h>
+#include <string.h>
 
 // Code taken from: https://github.com/tsoding/nob.h
 #define DA_INIT_CAP 128
@@ -41,6 +43,15 @@
 // printf like function that prints the name and line of the file where it was called
 #define log_error(msg, ...) _log_error(msg, __FILE__, __LINE__, __VA_ARGS__);
 
+typedef struct {
+    char *items;
+    size_t count;
+    size_t capacity;
+} StringBuilder;
+
+// dumps a null terminated string
+char *sb_dump_str(StringBuilder *sb);
+
 #endif // CCFUNCS_H
 
 #ifdef CCFUNCS_IMPLEMENTATION
@@ -54,6 +65,13 @@ void _log_error(const char *msg, char *file, int line, ...) {
     va_end(args);
 
     printf(" (at %s:%d)\n", file, line);
+}
+
+char *sb_dump_str(StringBuilder *sb) {
+    char *str = malloc(sb->count + 1);
+    strncpy(str, sb->items, sb->count);
+    str[sb->count] = '\0';
+    return str;
 }
 
 #endif // CCFUNCS_IMPLEMENTATION
