@@ -12,6 +12,15 @@
 // Code taken from: https://github.com/tsoding/nob.h
 #define DA_INIT_CAP 128
 
+// should be used only when you want to use custom initial capacity
+#define da_init(da, initCap)                                                      \
+    do {                                                                          \
+        assert((da)->items == NULL && "Should not be used in initialized array"); \
+        (da)->capacity = initCap;                                                 \
+        (da)->items = malloc((da)->capacity*sizeof(*(da)->items));                \
+        assert((da)->items != NULL && "No enough ram");                           \
+    } while(0)
+
 #define da_append(da, item)                                                          \
     do {                                                                             \
         if((da)->count >= (da)->capacity) {                                          \
