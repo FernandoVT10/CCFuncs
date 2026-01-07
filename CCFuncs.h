@@ -63,25 +63,13 @@
 // printf like function that prints the name and line of the file where it was called
 #define log_error(msg, ...) _log_error(msg, __FILE__, __LINE__, __VA_ARGS__);
 
-// STRING BUILDER //
+// ARENA //
 
 typedef struct {
-    char *items;
-    size_t count;
-    size_t capacity;
-} StringBuilder;
-
-// dumps a null terminated string
-char *sb_dump_str(StringBuilder *sb);
-
-// ARENA //
-typedef struct Region Region;
-
-struct Region {
     void *data;
     size_t count;
     size_t capacity;
-};
+} Region;
 
 // Arena is basically a dynamic array of Regions
 typedef struct {
@@ -111,13 +99,6 @@ void _log_error(const char *msg, char *file, int line, ...) {
     va_end(args);
 
     printf(" (at %s:%d)\n", file, line);
-}
-
-char *sb_dump_str(StringBuilder *sb) {
-    char *str = malloc(sb->count + 1);
-    strncpy(str, sb->items, sb->count);
-    str[sb->count] = '\0';
-    return str;
 }
 
 Arena *arena_create(size_t regionSize) {
